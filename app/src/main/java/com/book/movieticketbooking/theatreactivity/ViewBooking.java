@@ -49,7 +49,10 @@ public class ViewBooking extends AppCompatActivity {
         swipeRefreshLayout.setColorSchemeColors(Color.BLACK);
 
         recyclerView = (RecyclerView)findViewById(R.id.rec_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         FirebaseRecyclerOptions<Viewbooking> options = new FirebaseRecyclerOptions.Builder<Viewbooking>().
                 setQuery(FirebaseDatabase.getInstance().getReference("View Booking"), Viewbooking.class).build();

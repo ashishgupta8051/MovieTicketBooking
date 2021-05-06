@@ -49,7 +49,11 @@ public class UpdateUpcomingShow extends AppCompatActivity {
         swipeRefreshLayout.setColorSchemeColors(Color.BLACK);
 
         recyclerView = (RecyclerView)findViewById(R.id.recview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         FirebaseRecyclerOptions<Upcomingmovie> options = new FirebaseRecyclerOptions.Builder<Upcomingmovie>().
                 setQuery(FirebaseDatabase.getInstance().getReference("Upcoming Movie"), Upcomingmovie.class).build();

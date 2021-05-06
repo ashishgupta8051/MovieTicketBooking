@@ -49,7 +49,10 @@ public class DownloadMovie extends AppCompatActivity {
         swipeRefreshLayout.setColorSchemeColors(Color.BLACK);
 
         recyclerView = (RecyclerView)findViewById(R.id.rec_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         FirebaseRecyclerOptions<Downloadmovies> options = new FirebaseRecyclerOptions.Builder<Downloadmovies>().
                 setQuery(FirebaseDatabase.getInstance().getReference("Download Movie"), Downloadmovies.class).build();

@@ -129,7 +129,7 @@ public class UserActivity extends AppCompatActivity {
                        }else {
                            String id = databaseReference.push().getKey();
                            databaseReference = FirebaseDatabase.getInstance().getReference("User Feedback");
-                           Userfeedback user_feedback = new Userfeedback(id,Name,Feedback,RatingBar);
+                           Userfeedback user_feedback = new Userfeedback(id,Name,RatingBar,Feedback);
                            databaseReference.child(id).setValue(user_feedback).addOnSuccessListener(new OnSuccessListener<Void>() {
                                @Override
                                public void onSuccess(Void aVoid) {

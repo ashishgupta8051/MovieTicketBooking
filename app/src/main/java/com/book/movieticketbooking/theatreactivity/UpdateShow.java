@@ -48,7 +48,11 @@ public class UpdateShow extends AppCompatActivity {
         swipeRefreshLayout.setColorSchemeColors(Color.BLACK);
 
         recyclerView = (RecyclerView)findViewById(R.id.recview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         FirebaseRecyclerOptions<Addshow> options = new FirebaseRecyclerOptions.Builder<Addshow>().
                 setQuery(FirebaseDatabase.getInstance().getReference("Add Show"), Addshow.class).build();

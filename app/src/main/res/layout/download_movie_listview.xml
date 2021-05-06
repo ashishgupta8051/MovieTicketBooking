@@ -57,6 +57,7 @@
             android:layout_marginTop="10dp"
             android:text="Watch"
             android:textColor="#000000"
+            android:visibility="invisible"
             android:textSize="15dp"
             android:layout_marginLeft="10dp"
             android:background="@drawable/button"

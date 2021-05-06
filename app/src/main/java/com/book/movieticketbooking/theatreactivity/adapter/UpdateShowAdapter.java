@@ -20,8 +20,10 @@ import com.book.movieticketbooking.theatreactivity.model.Addshow;
 import com.book.movieticketbooking.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -176,22 +178,21 @@ public class UpdateShowAdapter extends FirebaseRecyclerAdapter<Addshow, UpdateSh
                     builder.setMessage("Are you sure you want to delete show ?");
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(final DialogInterface dialog, int which) {
                             String id = model.getMovieId();
                             FirebaseDatabase.getInstance().getReference("Add Show").child(id).removeValue();
                             StorageReference storageReference1 = FirebaseStorage.getInstance().getReference("Add Show").child(id).child("Image");
-                            storageReference1.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            storageReference1.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(view.getContext()," Delete show successful ",Toast.LENGTH_SHORT).show();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(view.getContext()," Something is wrong show not deleted ",Toast.LENGTH_SHORT).show();
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        Toast.makeText(view.getContext()," Delete show successful ",Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                    }else {
+                                        Toast.makeText(view.getContext()," Something is wrong show not deleted ",Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             });
-                            dialog.dismiss();
                         }
                     });
                     builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

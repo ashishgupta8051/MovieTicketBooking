@@ -78,7 +78,12 @@ public class MyProfile extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Userprofile userProfile = snapshot.getValue(Userprofile.class);
                 String ProfilePicUrl = userProfile.getUserProfilePic();
-                Picasso.get().load(ProfilePicUrl).fit().into(imageView);
+                if (ProfilePicUrl.contentEquals("None")){
+                    imageView.setImageResource(R.drawable.login);
+                }else {
+                    Picasso.get().load(ProfilePicUrl).fit().into(imageView);
+                }
+
                 Name.setText(userProfile.getUserName());
                 Dob.setText(userProfile.getUserDob());
                 Email.setText(userProfile.getUserEmail());

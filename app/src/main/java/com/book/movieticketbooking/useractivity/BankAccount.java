@@ -173,7 +173,7 @@ public class BankAccount extends AppCompatActivity {
                             editText.setError("Enter Amount");
                         }else if (DepositAmount.contentEquals("0")){
                             editText.setError("Enter Amount");
-                        }else if (Deposit >= 2001){
+                        }else if (Deposit >= 2000){
                             editText.setError("You add only 2000 at a one time");
                         }else {
                             databaseReference = FirebaseDatabase.getInstance().getReference("Account Info").child(uid);

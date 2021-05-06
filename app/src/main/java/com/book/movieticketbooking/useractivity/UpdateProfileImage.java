@@ -13,6 +13,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -46,6 +47,8 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,8 +57,10 @@ public class UpdateProfileImage extends AppCompatActivity {
     private ImageView image;
     private FirebaseAuth firebaseAuth;
     private Button button;
+    private FileOutputStream fileOutputStream;
     Uri uri;
     Uri FinalCrop;
+    Bitmap bitmap;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -115,9 +120,14 @@ public class UpdateProfileImage extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Userprofile userprofile = snapshot.getValue(Userprofile.class);
-                String ProfilePicUrl = userprofile.getUserProfilePic();
-                Picasso.get().load(ProfilePicUrl).fit().into(image);
+                //Userprofile userprofile = snapshot.getValue(Userprofile.class);
+                String ProfilePicUrl = snapshot.child("userProfilePic").getValue().toString();
+                if (ProfilePicUrl.contentEquals("None")){
+                    image.setImageResource(R.drawable.login);
+                }else {
+                    Picasso.get().load(ProfilePicUrl).fit().into(image);
+                }
+
             }
 
             @Override
@@ -200,14 +210,22 @@ public class UpdateProfileImage extends AppCompatActivity {
                 break;
             case R.id.action_share:
                 try {
-                    Intent intent1 = new Intent(Intent.ACTION_SEND);
-                    intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent1.putExtra(Intent.EXTRA_STREAM,FinalCrop);
-                    intent1.setType("image/*");
-                    startActivity(Intent.createChooser(intent1,"Share Via"));
-                }catch (Exception e){
-                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    File file = new File(getExternalCacheDir(),"sample.png");
+                    fileOutputStream = new FileOutputStream(file);
+                    bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
+                    bitmap.compress(Bitmap.CompressFormat.PNG,100,fileOutputStream);
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
+                    file.setReadable(true,false);
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                    intent.setType("image/png");
+                    startActivity(Intent.createChooser(intent,"Share via"));
+                } catch (Exception e){
+                    Toast.makeText(UpdateProfileImage.this, "Something is wrong please try again", Toast.LENGTH_SHORT).show();
                 }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

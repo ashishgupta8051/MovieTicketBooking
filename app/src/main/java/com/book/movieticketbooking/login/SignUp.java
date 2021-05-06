@@ -44,13 +44,13 @@ public class SignUp extends AppCompatActivity {
     private String UserProfilePic = "None";
     private Calendar calendar;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
         setupUI();
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);

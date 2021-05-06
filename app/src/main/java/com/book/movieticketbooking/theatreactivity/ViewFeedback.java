@@ -49,7 +49,11 @@ public class ViewFeedback extends AppCompatActivity {
         swipeRefreshLayout.setColorSchemeColors(Color.BLACK);
 
         recyclerView = (RecyclerView)findViewById(R.id.recview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         FirebaseRecyclerOptions<Userfeedback> options = new FirebaseRecyclerOptions.Builder<Userfeedback>().
                 setQuery(FirebaseDatabase.getInstance().getReference("User Feedback"), Userfeedback.class).build();

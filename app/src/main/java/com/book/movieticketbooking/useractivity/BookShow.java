@@ -51,7 +51,10 @@ public class BookShow extends AppCompatActivity {
         swipeRefreshLayout.setColorSchemeColors(Color.BLACK);
 
         recyclerView = (RecyclerView)findViewById(R.id.recview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         FirebaseRecyclerOptions<Addshow> options = new FirebaseRecyclerOptions.Builder<Addshow>().
                 setQuery(FirebaseDatabase.getInstance().getReference("Add Show"), Addshow.class).build();
@@ -99,7 +102,7 @@ public class BookShow extends AppCompatActivity {
                         .setQuery(FirebaseDatabase.getInstance().getReference("Add Show").orderByChild("movie_Name").startAt(query).endAt(query+"\uf8ff"), Addshow.class)
                         .build();
 
-        book_show_adapter =new BookShowAdapter(options);
+        book_show_adapter = new BookShowAdapter(options);
         book_show_adapter.startListening();
         recyclerView.setAdapter(book_show_adapter);
     }
